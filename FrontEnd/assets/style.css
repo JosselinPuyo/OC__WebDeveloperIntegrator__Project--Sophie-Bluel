@@ -275,3 +275,40 @@ footer nav ul {
   justify-content: flex-end;
   margin: 2em;
 }
+
+/* Etape 1.2 = Filters works */
+
+.filters-container {
+  width: 100%;
+  height: 37px;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 3em;
+}
+
+.filters-container button {
+  border: 1px solid #1d6154;
+  border-radius: 60px;
+  background-color: white;
+  font-family: "Syne";
+  font-weight: 700;
+  font-size: 16px;
+  color: #1d6154;
+  margin-left: 10px;
+  text-align: center;
+  padding: 9px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.filters-container button:hover {
+  background-color: #1d6154;
+  color: white;
+}
+
+.filters-container .active {
+  background-color: #1d6154;
+  color: white;
+}

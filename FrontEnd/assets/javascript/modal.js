@@ -17,6 +17,7 @@ const modalWorksContainer = document.querySelector(".modal-works-container");
 const trashIcons = [];
 const arrowsIcons = [];
 const modalFigures = [];
+const buttonDeleteGallery = document.querySelector(".btn-delete-gallery");
 
 // Etape 3.1 = Add modal window (admin) //
 
@@ -64,8 +65,8 @@ function closeModalButton() {
 // Fonction pour récupérer les travaux de l'API dans la modale //
 async function fetchWorksModal() {
   try {
-    response = await fetch(urlApiWorks);
-    data = await response.json();
+    const response = await fetch(urlApiWorks);
+    const works = await response.json();
 
     for (let i in works) {
       const figure = document.createElement("figure");
@@ -102,7 +103,7 @@ async function fetchWorksModal() {
         "arrows-icon"
       );
 
-      figcaption.innerHTML = "éditer";
+      figcaption.textContent = "éditer";
 
       trashIconContainer.appendChild(trashIcon);
       arrowsIconContainer.appendChild(arrowsIcon);
@@ -113,9 +114,72 @@ async function fetchWorksModal() {
       arrowsIcons.push(arrowsIcon);
       modalFigures.push(figure);
     }
+    // Appel de la fonction pour supprimer 1 projet
+    deleteWork();
   } catch (error) {
     console.error("Erreur : ", error);
   }
 }
 
+// Appel de la fonction pour récupérer les travaux de l'API dans la modale //
 fetchWorksModal();
+
+// Etape 3.2 = Delete works modal //
+
+// Fonction pour récupérer la requête 'DELETE' de l'API //
+async function fetchDeleteRequest(workId) {
+  const options = {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${userToken}`,
+    },
+  };
+
+  try {
+    const response = await fetch(
+      `http://localhost:5678/api/works/${workId}`,
+      options
+    );
+
+    if (response.ok) {
+      alert("Votre projet a bien été supprimé");
+      console.log("Projet supprimé");
+    }
+  } catch (error) {
+    console.error("Erreur : ", error);
+  }
+}
+
+// Fonction pour supprimer 1 projet //
+function deleteWork() {
+  for (let trashIcon of trashIcons) {
+    trashIcon.addEventListener("click", function () {
+      const workId = trashIcon.getAttribute("data-works-id");
+      // Appel de la fonction pour récupérer la requête 'DELETE' de l'API //
+      fetchDeleteRequest(workId);
+      for (let figure of modalFigures) {
+        if (figure.getAttribute("data-works-id") === workId) {
+          figure.remove();
+        }
+      }
+      for (let figure of figures) {
+        if (figure.getAttribute("data-works-id") === workId) {
+          figure.remove();
+        }
+      }
+    });
+  }
+
+  // Évènement sur le bouton « Supprimer la gallerie » : Appel de la fonction pour supprimer tous les projets //
+  buttonDeleteGallery.addEventListener("click", async function () {
+    if (confirm("Êtes-vous sûr de vouloir supprimer tous les travaux ?")) {
+      for (let i in works) {
+        const workId = works[i].id;
+        // Appel de la fonction pour récupérer la requête 'DELETE' de l'API //
+        fetchDeleteRequest(workId);
+      }
+      gallery.innerHTML = "";
+      modalWorksContainer.innerHTML = "";
+    }
+  });
+}

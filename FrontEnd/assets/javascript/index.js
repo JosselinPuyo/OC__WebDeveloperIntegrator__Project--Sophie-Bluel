@@ -83,3 +83,13 @@ for (let filter of filters) {
     }
   });
 }
+
+// Évènement pour afficher la connexion réussi //
+window.addEventListener("DOMContentLoaded", () => {
+  const isConnected = localStorage.getItem("isConnected");
+  if (isConnected === "true") {
+    alert("Vous êtes maintenant connecté !");
+    console.log("Connexion réussi !");
+    localStorage.removeItem("isConnected"); // - Suppression de la variable isConnected
+  }
+});

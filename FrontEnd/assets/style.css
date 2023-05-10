@@ -165,23 +165,29 @@ h2 {
   font-size: 30px;
   color: #1d6154;
 }
+
 nav ul {
   display: flex;
   align-items: center;
   list-style-type: none;
 }
+
 nav li {
   padding: 0 10px;
   font-size: 1.2em;
 }
 
-li:hover {
+li a {
+  text-decoration: none;
   color: #000;
-  font-weight: 700;
 }
 
-nav li img {
+li img {
   width: 22px;
+}
+
+li:hover {
+  font-weight: 700;
 }
 
 #introduction {
@@ -262,6 +268,12 @@ input[type="submit"] {
   width: 180px;
   text-align: center;
   border-radius: 60px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+input[type="submit"]:hover {
+  background-color: #0e2f28;
 }
 
 footer {
@@ -311,4 +323,46 @@ footer nav ul {
 .filters-container .active {
   background-color: #1d6154;
   color: white;
+}
+
+/* Etape 2.1 = Login page design integration */
+
+#login-container {
+  margin-top: 9.5em;
+  margin-bottom: 22em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+#login-container h2 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#login-container form {
+  text-align: left;
+  margin: 37px 0 0;
+  display: flex;
+  flex-direction: column;
+  max-width: 379px;
+  width: 100%;
+}
+
+#login-container input {
+  height: 50px;
+  font-size: 1.2em;
+  border: none;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.09);
+}
+
+#login-container label {
+  margin: 2em 0 1em 0;
+}
+
+#login-container p a {
+  color: #3d3d3d;
 }

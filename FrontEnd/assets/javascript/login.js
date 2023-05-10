@@ -2,11 +2,9 @@
 
 // - Étape 2.2 - //
 const urlApiLogin = "http://localhost:5678/api/users/login";
-
 const loginButton = document.querySelector("#login-button");
 const emailInput = document.querySelector("#email-input");
 const passwordInput = document.querySelector("#password-input");
-
 const emptyFieldMessage = "Saisissez un identifiant et un mot de passe";
 const errorMessage = "Erreur dans l'identifiant ou le mot de passe";
 

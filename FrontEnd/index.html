@@ -11,8 +11,19 @@
 	<link rel="stylesheet" href="./assets/style.css">
 	<script src="https://kit.fontawesome.com/54df971b29.js" crossorigin="anonymous"></script>
 	<script src="./assets/javascript/index.js" defer></script>
+	<script src="./assets/javascript/modal.js" defer></script>
 </head>
 <body>
+
+<!-- Etape 3.1 = Add modal window (admin) -->
+<div class="edit-mode-banner">
+	<button class="edit-btn-banner">
+		<p><i class="fa-regular fa-pen-to-square"></i>&ensp;Mode édition</p>
+	</button>
+	<button class="publish-btn" type="button">
+		<p>publier les changements</p>
+	</button>
+</div>
 
 <header>
 	<h1>Sophie Bluel <span>Architecte d'inteérieur</span></h1>
@@ -20,7 +31,7 @@
 		<ul>
 			<li>projets</li>
 			<li>contact</li>
-			<li><a href="./login.html">login</a></li>
+			<li class="login"><a href="./login.html">login</a></li>
 			<li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
 		</ul>
 	</nav>
@@ -28,10 +39,18 @@
 
 <main>
 	<section id="introduction">
-		<figure>
+		<figure class="edit-mode-container-1">
 			<img src="./assets/images/sophie-bluel.png" alt="">
+			<!-- Etape 3.1 = Add modal window (admin) -->
+			<button class="edit-btn" id="edit-btn-1">
+				<p><i class="fa-regular fa-pen-to-square"></i>&ensp;Modifier</p>
+			</button>
 		</figure>
-		<article>
+		<article class="edit-mode-container-2">
+			<!-- Etape 3.1 = Add modal window (admin) -->
+			<button class="edit-btn" id="edit-btn-2">
+				<p><i class="fa-regular fa-pen-to-square"></i></i>&ensp;Modifier</p>
+			</button>
 			<h2>Designer d'espace</h2>
 			<p>Je raconte votre histoire, je valorise vos idées. Je vous accompagne de la conception à la livraison finale du chantier.</p>
 			<p>Chaque projet sera étudié en commun, de façon à mettre en valeur les volumes, les matières et les couleurs dans le respect de l’esprit des lieux et le choix adapté des matériaux. Le suivi du chantier sera assuré dans le souci du détail, le respect du planning et du budget.</p>
@@ -40,7 +59,13 @@
 	</section>
 
 	<section id="portfolio">
-		<h2>Mes Projets</h2>
+		<div class="edit-mode-container-3">
+			<h2>Mes Projets</h2>
+			<!-- Etape 3.1 = Add modal window (admin) -->
+			<button class="edit-btn btn-open-modal-works" id="edit-btn-3">
+				<p><i class="fa-regular fa-pen-to-square"></i></i>&ensp;Modifier</p>
+			</button>
+		</div>
 		<!-- Etape 1.2 = Filters works -->
 		<div class="filters-container">
 			<button class="filterAll active">Tous</button>
@@ -74,6 +99,19 @@
 		</ul>
 	</nav>
 </footer>
+
+<!-- Etape 3.1 = Add modal window (Modal n°1) -->
+<div class="modal-container">
+	<div class="modal-1">
+		<div><i class="fa-sharp fa-solid fa-xmark btn-close-modal-1"></i></div>
+		<h3>Galerie photo</h3>
+		<div class="modal-works-container"></div>
+		<hr>
+		<button class="btn-add-project">Ajouter une photo</button>
+		<button class="btn-delete-gallery">Supprimer la gallerie</button>
+	</div>
+</div>
+		
 
 </body>
 </html>

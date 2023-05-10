@@ -31,7 +31,7 @@ function generateWorks() {
     const figcaption = document.createElement("figcaption");
 
     figure.setAttribute("data-works-category-id", works[i].category.id);
-    figure.setAttribute("works-id", works[i].id);
+    figure.setAttribute("data-works-id", works[i].id);
 
     img.setAttribute("src", works[i].imageUrl);
     img.setAttribute("alt", works[i].title);

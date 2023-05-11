@@ -1,6 +1,6 @@
 // Variables :
 
-// - Étape 3.1 - //
+// - Étape 3.1/3.2 - //
 const userToken = localStorage.getItem("token");
 
 const loginButton = document.querySelector(".login a");
@@ -18,6 +18,20 @@ const trashIcons = [];
 const arrowsIcons = [];
 const modalFigures = [];
 const buttonDeleteGallery = document.querySelector(".btn-delete-gallery");
+
+// - Étape 3.3/3.4 - //
+const buttonAddProject = document.querySelector(".btn-add-project");
+const modal2 = document.querySelector(".modal-2");
+const buttonCloseModal2 = document.querySelector(".btn-close-modal-2");
+const buttonBackModal = document.querySelector(".btn-back-modal");
+const urlApiCategories = "http://localhost:5678/api/categories";
+const select = document.querySelector("select");
+const inputPicture = document.querySelector(".input-picture");
+const previewPicture = document.querySelector(".preview-picture");
+const hiddenPreviewElements = document.querySelectorAll(".hidden-elements");
+const inputTitleProject = document.querySelector("#title-input");
+const buttonConfirmAddProject = document.querySelector(".btn-confirm-add-work");
+const formProjectContainer = document.querySelector(".form-project-container");
 
 // Etape 3.1 = Add modal window (admin) //
 
@@ -48,7 +62,8 @@ function openModal() {
 
 // Évènement : Appel de la fonction pour fermer la modale //
 document.addEventListener("click", closeModalWindow); // - Via la fenêtre
-buttonCloseModal1.addEventListener("click", closeModalButton); // - Via l'icone « x »
+buttonCloseModal1.addEventListener("click", closeModalButton); // - Via l'icône « x »
+buttonCloseModal2.addEventListener("click", closeModalButton); // - Via l'icône « x »
 
 // Fonction pour fermer la modale - Via la fenêtre //
 function closeModalWindow(event) {
@@ -60,6 +75,7 @@ function closeModalWindow(event) {
 // Fonction pour fermer la modale - Via l'icone « x » //
 function closeModalButton() {
   modalContainer.style.display = "none";
+  modal2.style.display = "none";
 }
 
 // Fonction pour récupérer les travaux de l'API dans la modale //
@@ -183,3 +199,142 @@ function deleteWork() {
     }
   });
 }
+
+// Etape 3.3/3.4 = Add new work modal & page //
+
+// Évènement sur le bouton « Ajouter une photo » : Fonction pour ouvrir la modale n°2 //
+buttonAddProject.addEventListener("click", function () {
+  modal1.style.display = "none";
+  modal2.style.display = "flex";
+});
+
+// Évènement sur l'icône « ← » : Fonction pour retourner à la modale n°1 //
+buttonBackModal.addEventListener("click", function () {
+  modal2.style.display = "none";
+  modal1.style.display = "flex";
+});
+
+// Fonction pour récupérer les catégories de l'API dans le formulaire //
+async function fetchCategoriesModal() {
+  try {
+    const response = await fetch(urlApiCategories);
+    const works = await response.json();
+    for (let i in works) {
+      const option = document.createElement("option");
+
+      option.setAttribute("value", works[i].id);
+      option.innerHTML = works[i].name;
+
+      select.appendChild(option);
+    }
+  } catch (error) {
+    console.error("Erreur : ", error);
+  }
+}
+
+fetchCategoriesModal();
+
+// Évènement sur le bouton « Ajouter photo » : Fonction pour prévisualiser la photo //
+inputPicture.addEventListener("change", function () {
+  let reader = new FileReader();
+  reader.readAsDataURL(inputPicture.files[0]);
+  reader.addEventListener("load", function () {
+    previewPicture.src = reader.result;
+  });
+
+  for (let e of hiddenPreviewElements) {
+    e.style.display = "none";
+  }
+  previewPicture.style.display = "flex";
+});
+
+// Évènement sur le bouton « Valider » : Fonction pour renvoyer la class ".confirmed" lorsque tous les champs sont remplis //
+inputTitleProject.addEventListener("input", updateConfirmButton);
+inputPicture.addEventListener("input", updateConfirmButton);
+select.addEventListener("change", updateConfirmButton);
+
+// Fonction pour renvoyer la class ".confirmed" lorsque tous les champs sont remplis //
+function updateConfirmButton() {
+  console.log(
+    inputTitleProject.value.trim() !== "" &&
+      select.value !== "" &&
+      inputPicture.value !== ""
+  );
+
+  if (
+    inputTitleProject.value.trim() !== "" &&
+    select.value !== "" &&
+    inputPicture.value !== "" &&
+    !buttonConfirmAddProject.classList.contains("confirmed")
+  ) {
+    buttonConfirmAddProject.classList.add("confirmed");
+  } else if (
+    (inputTitleProject.value.trim() === "" ||
+      select.value === "" ||
+      inputPicture.value === "") &&
+    buttonConfirmAddProject.classList.contains("confirmed")
+  ) {
+    buttonConfirmAddProject.classList.remove("confirmed");
+  }
+}
+
+// Évènement sur le formulaire : Fonction pour ajouter un nouveau projet //
+formProjectContainer.addEventListener("submit", async function (event) {
+  event.preventDefault();
+  if (buttonConfirmAddProject.classList.contains("confirmed")) {
+    const formData = new FormData();
+    formData.append("title", inputTitleProject.value);
+    formData.append("image", inputPicture.files[0]);
+    formData.append("category", select.value);
+
+    const options = {
+      method: "POST",
+      headers: {
+        accept: "application/json",
+        Authorization: `Bearer ${userToken}`,
+      },
+      body: formData,
+    };
+
+    try {
+      const response = await fetch(urlApiWorks, options);
+      if (response.ok) {
+        const figure = document.createElement("figure");
+        const img = document.createElement("img");
+        const figcaption = document.createElement("figcaption");
+
+        const reader = new FileReader();
+        reader.readAsDataURL(inputPicture.files[0]);
+        reader.addEventListener("load", function () {
+          img.src = reader.result;
+        });
+
+        figure.setAttribute("data-works-category-id", select.value);
+        img.setAttribute("alt", inputTitleProject.value);
+        figcaption.textContent = inputTitleProject.value;
+
+        figure.append(img, figcaption);
+        gallery.appendChild(figure);
+
+        modalWorksContainer.innerHTML = "";
+        fetchWorksModal();
+
+        previewPicture.src = "";
+        inputPicture.value = "";
+        inputTitleProject.value = "";
+        inputPicture.value = "";
+        select.value = "";
+
+        for (let e of hiddenPreviewElements) {
+          e.style.display = "flex";
+        }
+
+        alert("Félicitation ! Votre projet a bien été ajouté");
+      }
+    } catch (error) {
+      console.error("Erreur : ", error);
+    }
+  } else {
+    alert("Erreur : Veuillez remplir tous les champs du formulaire");
+  }
+});
